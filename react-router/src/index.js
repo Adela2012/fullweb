@@ -4,9 +4,10 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import RouteComponent from "./pages/RouteComponent";
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <RouteComponent />
   </React.StrictMode>,
   document.getElementById('root')
 );
