@@ -65,9 +65,10 @@ yarn start
 建立pages下面的单页面about：
 ```
 umi g page about
-``
+```
 
 建立文件夹more(默认是js和css)：
+
 ```
 umi g page more/index --typescript --less
 ```
@@ -79,7 +80,205 @@ umi g page more/index --typescript --less
 路由配置详细查看官方文档：https://umijs.org/zh-CN/docs/routing
 
         
+### 约定式路由
+#### 动态路由
+```
+umi g page product/[id]
+```
+
+```js
+import React from 'react';
+import { IRouteComponentProps } from 'umi';
+import styles from './[id].less';
+export default (props: IRouteComponentProps) => {  
+  console.log('product', props); //sy-log  
+  return (    
+    <div>      
+      <h1 className={styles.title}>Page product/[id]</h1>
+      </div>  
+  );
+};
+```
+路由配置
+```js
+{ path: '/product/:id', component: '@/pages/product/[id]' }
+```
 
 
+
+
+#### 动态可选路由
+路由配置可选的动态路由umi3暂不支持，
+
+
+#### 嵌套路由
+
+Umi 里约定目录下有_layout.tsx时会生成嵌套路由，以_layout.tsx为该目录的 layout。layout文件需要返回一个 React 组件，并通过props.children渲染子组件。
+
+首先创建_layout.js
+```
+umi g page product/_layout
+```
+
+约定src/layouts/index.tsx为全局路由。返回一个 React 组件，并通过props.children渲染子组件。
+
+比如：
+```js
+import React from 'react';
+import { IRouteComponentProps } from 'umi';
+export default (props: IRouteComponentProps) => {  
+  console.log('product', props); //sy-log  
+  return (    
+    <div style={{ color: 'red' }}>     
+      <h1>layout</h1>      
+      {props.children}    
+    </div>  
+  );
+}; 
+
+```
+
+配置路由：
+
+```js
+{      
+  path: '/product/:id',      
+  component: '@/pages/product/_layout',      
+  routes: [{ path: '/product/:id', component: '@/pages/product/[id]' }],    }
+```
+
+
+
+#### 全局 layout
+约定src/layouts/index.tsx为全局路由。返回一个 React 组件，并通过props.children渲染子组件。
+
+```js
+import { IRouteComponentProps } from 'umi'
+
+export default function Layout({ children, location, route, history, match }: IRouteComponentProps) {
+  return children
+}
+
+```
+
+### 不同的全局 layout
+
+你可能需要针对不同路由输出不同的全局 layout，Umi 不支持这样的配置，但你仍可以在src/layouts/index.tsx中对location.path做区分，渲染不同的 layout 。比如想要针对/login输出简单布局
+```js
+export default function(props) {
+  if (props.location.pathname === '/login') {
+    return <SimpleLayout>{ props.children }</SimpleLayout>
+  }
+
+  return (
+    <>
+      <Header />
+      { props.children }
+      <Footer />
+    </>
+  );
+}
+
+```
+
+
+#### 404 路由
+```js
+umi g page 404/index --typescript --less
+```
+生成路由
+```js
+{ component: '@/pages/404' }
+```
+
+#### 扩展路由属性
+支持在代码层通过导出静态属性的方式扩展路由
+```js
+function HomePage() {
+  return <h1>Home Page</h1>;
+}
+HomePage.title = 'Home Page';
+export default HomePage;
+```
+其中的 title 会附加到路由配置中。
+
+## 页面跳转
+在 umi 里，页面之间跳转有两种方式：声明式和命令式。
+### 声明式
+通过 Link 使用，通常作为 React 组件使用。
+```js
+import { Link } from 'umi';
+export default () => (
+  <Link to="/list">Go to list page</Link>
+);
+```
+
+### 命令式
+通过 history 使用，通常在事件处理中被调用。
+```js
+import { history } from 'umi';
+function goToListPage() {
+  history.push('/list');
+}
+```
+也可以直接从组件的属性中取得 history
+```js
+export default (props) => (
+  <Button onClick={()=>props.history.push('/list');}>Go to list page</Button>
+)
+```
+
+
+## 按需加载
+为了简化部署成本，按需加载功能默认是关闭的，你需要在使用之前先通过配置开启，
+```js
+export default {
+  dynamicImport: {},
+}
+```
+### 按需加载组件 dynamic
+通过 Umi 的dynamic接口实现
+```js
+import { dynamic } from 'umi';
+const delay = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
+const App = dynamic({  
+  loader: async function() {    
+    await delay(/* 1s */1000);    
+    return () => <div>I will render after 1s</div>;  
+  },
+});
+```
+封装一个异步组件
+```js
+import { dynamic } from 'umi';
+export default dynamic({
+  loader: async function() {
+    // 这里的注释 webpackChunkName 可以指导 webpack 将该组件 HugeA 以这个名字单独拆出去
+    const { default: HugeA } = await import(/* webpackChunkName: "external_A" */ './HugeA');
+    return HugeA;
+  },
+});
+```
+使用异步组件
+```js
+import React from 'react';
+import AsyncHugeA from './AsyncHugeA';
+// 像使用普通组件一样即可
+// dynamic 为你做:
+// 1. 异步加载该模块的 bundle
+// 2. 加载期间 显示 loading（可定制）
+// 3. 异步组件加载完毕后，显示异步组件
+export default () => {
+  return <AsyncHugeA />;
+}
+```
+
+### 按需加载非组件
+通过import()实现
+```js
+import('g2').then(() => { 
+   // do something with g2
+});
+```
 
 
