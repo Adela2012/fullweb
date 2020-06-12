@@ -24,8 +24,12 @@ function FunctionComponent({name}) {
 
 class ClassComponent extends Component {
   render() {
-    return <div className="border">{this.props.name}</div>;
+    return <div className="border">{this.props.name} {this.props.msg}</div>;
   }
+}
+
+ClassComponent.defaultProps = {
+  msg: '默认defaultProps'
 }
 
 const jsx = (

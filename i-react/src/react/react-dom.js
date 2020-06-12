@@ -2,8 +2,6 @@ import { TEXT } from './const'
 
 
 function render(vnode, container) {
-    console.log('vnode', vnode, container)
-
     const node = createNode(vnode, container);
     container.appendChild(node)
 }
