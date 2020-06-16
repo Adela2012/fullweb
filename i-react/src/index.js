@@ -8,7 +8,7 @@ import Component from './react/Component'
 import './index.css';
 
 
-function FunctionComponent({name}) {
+function FunctionComponent({ name }) {
   return (
     <div className="border">
       {name}
@@ -38,6 +38,17 @@ const jsx = (
     <a href="https://www.google.com/">google</a>
     <FunctionComponent name="FunctionComponent" />
     <ClassComponent name="ClassComponent" />
+    {/* <>
+      <h1>h1</h1>
+      <div>8888</div>
+    </>
+    <ul>
+      {
+        [1, 2, 3].map(i => <li>
+          text{i}
+        </li>)
+      }
+    </ul> */}
   </div>
 );
 
