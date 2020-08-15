@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, Button, PermissionsAndroid, Platform, Alert } from 'react-native';
-
+import RootScreen from './RootScreen';
 export default function App() {
   const [permissionsGranted, setPermissionsGranted] = React.useState(false);
   const [result, setResult] = React.useState('');
@@ -31,13 +31,14 @@ export default function App() {
   return (
     <View style={styles.container}>
       {/* <Button title="去授权~" onPress={requestCameraPermission} /> */}
-      <Button title="去授权2~" 
+      {/* <Button title="去授权2~" 
         color="red"
         onPress={checkPermissions}/>
       <Text style={styles.paragraph}>
         {permissionsGranted ? '已授权' :'未授权'}
       </Text>
-      <Text>{result}</Text>
+      <Text>{result}</Text> */}
+      <RootScreen />
     </View>
   );
 }
