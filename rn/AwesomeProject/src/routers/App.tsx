@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, Button, PermissionsAndroid, Platform, Alert } from 'react-native';
-import RootScreen from './RootScreen';
+// import RootScreen from './RootScreen';
+// import GridScreen from './GridScreen';
+import WebScreen from './WebScreen';
 export default function App() {
   const [permissionsGranted, setPermissionsGranted] = React.useState(false);
   const [result, setResult] = React.useState('');
@@ -38,7 +40,9 @@ export default function App() {
         {permissionsGranted ? '已授权' :'未授权'}
       </Text>
       <Text>{result}</Text> */}
-      <RootScreen />
+      {/* <RootScreen /> */}
+      {/* <GridScreen /> */}
+      <WebScreen />
     </View>
   );
 }
