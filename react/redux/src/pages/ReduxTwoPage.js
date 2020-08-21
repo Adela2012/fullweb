@@ -15,6 +15,8 @@ export default class ReduxTwoPage extends Component {
         store.dispatch({
             type: 'ADD'
         })
+
+       
     }
     minus = () => {
         store.dispatch({
@@ -22,11 +24,13 @@ export default class ReduxTwoPage extends Component {
         })
     }
     asyncAdd = () => {
-            store.dispatch(() => {
-                setTimeout(() => {
-                    store.dispatch({type: 'ADD'})
-                }, 0);
-            }) 
+        store.dispatch((dispatch, getState) => {
+            setTimeout(() => {
+                dispatch({
+                    type: 'ADD'
+                })
+            }, 1);
+        })
     }
     render() {
         return (

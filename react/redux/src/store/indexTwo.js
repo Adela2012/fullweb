@@ -1,6 +1,6 @@
 
-// import {createStore} from '../i-redux'
-import {createStore, applyMiddleware} from 'redux'
+import {createStore, applyMiddleware} from '../i-redux'
+// import {createStore, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
 import logger from 'redux-logger'
 
