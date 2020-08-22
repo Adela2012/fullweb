@@ -32,14 +32,18 @@ export default class ReduxTwoPage extends Component {
             }, 1);
         })
     }
+    promiseAdd = () => {
+        store.dispatch(Promise.resolve({type: "ADD"}))
+    }
     render() {
         return (
             <div>
-                {store.getState()}
+                {store.getState().home}
 
                 <button onClick={this.add}>add</button>
                 <button onClick={this.minus}>minus</button>
                 <button onClick={this.asyncAdd}>asyncAdd</button>
+                <button onClick={this.promiseAdd}>promiseAdd</button>
             </div>
         )
     }
