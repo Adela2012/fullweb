@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/Provider/find_list.dart';
 import 'package:flutter_demo/Tab/find/CompanyItem.dart';
 import 'package:flutter_demo/Tab/find/company.dart';
 import 'package:flutter_demo/Tab/find/companyDetail/CompanyDetailScreen.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:http/http.dart' as http;
 
 class FindScreen extends StatefulWidget {
   FindScreen({Key key}) : super(key: key);
@@ -16,51 +15,29 @@ class FindScreen extends StatefulWidget {
 
 class _FindScreenState extends State<FindScreen> {
 
-  List<Company> _companies = [];
-  int currentPage = 1;
-
-  ScrollController _scrollController = ScrollController();
   RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   @override
   void initState() {
     super.initState();
-    getCompanyList();
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
-        print('scroll end');
-      }
-    });
+    FindListProvider provider = Provider.of<FindListProvider>(context, listen: false);
+    provider.refreshData();
   }
 
-  getCompanyList() async{
-    String url = 'http://m.app.haosou.com/index/getData?type=1&page=$currentPage';
-    var response = await http.get(url);
-    var data = response.body;
-    var map = jsonDecode(data);
-    // print(map);
-    if (currentPage == 1) {
-      setState(() {
-        _companies = Company.fromMapData(map);
-      });
-      _refreshController.refreshCompleted();
-    } else {
-      setState(() {
-        _companies.addAll(Company.fromMapData(map));
-      });
-      _refreshController.loadComplete();
-    }
-
-  }
 
   _buildContent() {
-    if(_companies.isEmpty) {
-      return Center(
-        child: CircularProgressIndicator()
+    return Consumer<FindListProvider>(builder: (context, provider, _){
+      return IndexedStack(
+        index: provider.showValue,
+        children: <Widget>[
+          new Center(child: CircularProgressIndicator()),
+          _buildListView()
+        ]
       );
-    }
-
+    });
+  }
+  _buildListView() {
+    FindListProvider provider = Provider.of<FindListProvider>(context, listen: false);
     return SmartRefresher(
         controller: _refreshController,
         enablePullDown: true,
@@ -79,10 +56,9 @@ class _FindScreenState extends State<FindScreen> {
         onLoading: _onLoading,
         onRefresh: _onRefresh,
         child: ListView.builder(
-          controller: _scrollController,
-          itemCount: _companies.length,
+          itemCount: provider.companyList.length,
           itemBuilder: (context, index) {
-            Company model = _companies[index];
+            Company model = provider.companyList[index];
             print(index);
             return InkWell(
               onTap: () {
@@ -110,15 +86,23 @@ class _FindScreenState extends State<FindScreen> {
   }
 
   _onLoading() async {
-    // _refreshController.loadComplete();
-    currentPage++;
-    getCompanyList();
+    FindListProvider provider = Provider.of<FindListProvider>(context, listen: false);
+    bool isSuccess = await provider.loadMoreData();
+    if (isSuccess) {
+      _refreshController.loadComplete();
+    } else {
+      _refreshController.loadFailed();
+    }
   }
 
   _onRefresh() async {
-    currentPage = 1;
-    getCompanyList();
-    // _refreshController.refreshFailed();
+    FindListProvider provider = Provider.of<FindListProvider>(context, listen: false);
+    bool isSuccess = await provider.refreshData();
+    if (isSuccess) {
+      _refreshController.refreshCompleted();
+    } else {
+      _refreshController.refreshFailed();
+    }
   }
 }
 
