@@ -17,6 +17,7 @@ class FindScreen extends StatefulWidget {
 class _FindScreenState extends State<FindScreen> {
 
   List<Company> _companies = [];
+  int currentPage = 1;
 
   ScrollController _scrollController = ScrollController();
   RefreshController _refreshController = RefreshController(initialRefresh: false);
@@ -34,14 +35,23 @@ class _FindScreenState extends State<FindScreen> {
   }
 
   getCompanyList() async{
-    String url = 'http://m.app.haosou.com/index/getData?type=1&page=1';
+    String url = 'http://m.app.haosou.com/index/getData?type=1&page=$currentPage';
     var response = await http.get(url);
     var data = response.body;
     var map = jsonDecode(data);
     // print(map);
-    setState(() {
-      _companies = Company.fromMapData(map);
-    });
+    if (currentPage == 1) {
+      setState(() {
+        _companies = Company.fromMapData(map);
+      });
+      _refreshController.refreshCompleted();
+    } else {
+      setState(() {
+        _companies.addAll(Company.fromMapData(map));
+      });
+      _refreshController.loadComplete();
+    }
+
   }
 
   _buildContent() {
@@ -100,11 +110,15 @@ class _FindScreenState extends State<FindScreen> {
   }
 
   _onLoading() async {
-    _refreshController.loadComplete();
+    // _refreshController.loadComplete();
+    currentPage++;
+    getCompanyList();
   }
 
   _onRefresh() async {
-    _refreshController.refreshFailed();
+    currentPage = 1;
+    getCompanyList();
+    // _refreshController.refreshFailed();
   }
 }
 
