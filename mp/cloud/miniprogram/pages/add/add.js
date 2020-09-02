@@ -15,12 +15,22 @@ Page({
 
   },
 
+  askFor() {
+    wx.cloud.callFunction({
+      name: 'add',
+      data: {a: 1, b: 2},
+      success: (res) => {
+        console.log(res)
+      }
+    })
+  },
+
   /**
    * Lifecycle function--Called when page is initially rendered
    */
   onReady: function () {
 
-  },
+  },›
 
   /**
    * Lifecycle function--Called when page show

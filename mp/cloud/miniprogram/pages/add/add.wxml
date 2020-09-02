@@ -1,2 +1,1 @@
-<!--miniprogram/pages/add/add.wxml-->
-<text>miniprogram/pages/add/add.wxml</text>
+<button type="primary" bindtap="askFor">ask for cloud</button>
