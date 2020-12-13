@@ -1,1 +1,6 @@
-<button type="primary" bindtap="askFor">ask for cloud</button>
+<!-- <button type="primary" bindtap="askFor">ask for cloud</button> -->
+
+
+<canvas type="2d" id="myCanvas" style="height:300px;width:300px;"></canvas>
+
+<button type="primary" bindtap="saveCanvas">saveCanvas</button>
