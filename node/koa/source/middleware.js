@@ -19,22 +19,51 @@
 
 // console.log(fn(1, 3))
 
+// function compose(middlewares) {
+//     return function() {
+//         return dispatch(0)
+
+//         function dispatch(i) {
+//             const fn = middlewares[i]
+
+//             if(!fn) return Promise.resolve()
+
+//             return Promise.resolve(
+//                 fn(function next() {
+//                     return dispatch(i + 1)
+//                 })
+//             )
+//         }
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
 function compose(middlewares) {
-    return function() {
+    return (...arg) => {
         return dispatch(0)
 
         function dispatch(i) {
-            const fn = middlewares[i]
-
-            if(!fn) return Promise.resolve()
-
-            return Promise.resolve(
-                fn(function next() {
-                    return dispatch(i + 1)
-                })
-            )
+            let fn = middlewares[i]
+            if (!fn) {
+                return Promise().resolve()
+            } else {
+                return Promise.resolve(fn(() => dispatch(i+1)))
+            }
+            
         }
     }
+}
+
+function compose2(middlewares) {
+    return middlewares.reduce((fn, cur) => (...arg) => fn(() => cur(...arg))) 
 }
 
 
@@ -69,5 +98,5 @@ function delay() {
 }
 
 const middlewares = [fn1, fn2, fn3]; 
-const finalFn = compose(middlewares); 
+const finalFn = compose2(middlewares); 
 finalFn();

@@ -7,25 +7,28 @@ class Store {
     constructor(options) {
         this.$options = options
 
-        this._vm = new Vue({
-            data: {
-                $$state: options.state
-            }
-        })
-
         this._mutations = options.mutations
         this._actions = options.actions
 
         this.commit = this.commit.bind(this)
         this.dispatch = this.dispatch.bind(this)
 
+        const computed = {}
         this.getters = {}
         Object.keys(options.getters).forEach(key => {
             Object.defineProperty(this.getters, key, {
                 get() {
+                    // computed
                     return options.getters[key](options.state)
                 }
             })
+        })
+
+        this._vm = new Vue({
+            data: {
+                $$state: options.state
+            },
+            computed,
         })
     }
 
