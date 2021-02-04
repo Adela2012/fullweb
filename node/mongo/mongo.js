@@ -26,5 +26,10 @@
 
     console.log(4444, JSON.stringify(ret.result))
 
+    // 删除文档 
+    ret = await fruits.deleteOne({name: '苹果'})
 
+    // await fruits.deleteMany()
+
+    client.close()
 })()

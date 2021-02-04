@@ -10,12 +10,21 @@ app.get("/", (req, res) => {
 
 app.get("/api/list", async (req, res) => {
     // 分页查询
-    const { page} = req.query
+    const { page, category, keyword} = req.query
+
+    const condition = {}
+
+    if (category) {
+        condition.category = category
+    }
+    if (keyword) {
+        condition.name = { $regex: new RegExp(keyword) }
+    }
     try {
-        const col = mongo.col("fruits")
-        const total = await col.find().count()
+        const col = mongo.col('fruits')
+        const total = await col.find(condition).count()
         const fruits = await col
-            .find()
+            .find(condition)
             .skip((page - 1) * 5)
             .limit(5)
             .toArray()

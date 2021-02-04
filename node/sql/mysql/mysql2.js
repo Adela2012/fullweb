@@ -6,7 +6,7 @@
       host: "localhost",
       user: "root",
       password: "admin123", // 修改为你的密码
-      database: "example" // 请确保数据库存在
+      database: "test" // 请确保数据库存在
   }
 
   const connection = await mysql.createConnection(cfg)
@@ -18,7 +18,7 @@
       PRIMARY KEY (id))
   `)
   console.log('create', ret)
-
+ 
   ret = await connection.execute(`
           INSERT INTO test(message)
           VALUES(?)
@@ -26,10 +26,10 @@
   console.log('insert:', ret)
 
 
-  ret = await connection.execute(`
+  const [rows, fields] = await connection.execute(`
           SELECT * FROM test
   `)
-  console.log(JSON.stringify(ret[0]))
+  console.log(JSON.stringify(rows))
   // console.log(ret[1])
 
   connection.end()
