@@ -1,7 +1,13 @@
+
+const router = require('koa-router')()
+
+const jwt = require("jsonwebtoken") 
+const jwtAuth = require("koa-jwt")
+
 const secret = "it's a secret"
 
-const cors = require('koa-cors')
-
+const bodyParser = require('koa-bodyparser') 
+const static = require('koa-static')
 const Koa = require('koa')
 const app = new Koa()
 
@@ -11,10 +17,10 @@ app.use(static(__dirname + '/'))
 
 app.use(bodyParser())
 
-router.post('/users/login-token' async ctx => {
+router.post('/users/login-token', async ctx => {
     const {body} = ctx.request
 
-    const userinfo = body.userinfo
+    const userinfo = body.username
     ctx.body = {
         message: 'success login',
         user: userinfo,
@@ -35,11 +41,11 @@ router.get(
 
         ctx.body = {
             messge: 'get data success',
-            userinfo: ctx.state.userinfo
+            userinfo: ctx.state.user.data
         }
     }
 )
 
 app.use(router.routes())
-
+app.use(router.allowedMethods());
 app.listen(3000)

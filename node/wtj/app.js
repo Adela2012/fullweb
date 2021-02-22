@@ -31,7 +31,7 @@ app.use(session(SESS_CONFIG, app))
 app.use(async (ctx, next) => {
     const keys = await client.keys('*')
     keys.forEach(async key => {
-        console.log(await client.get(key))
+        console.log(key, await client.get(key))
     })
     await next()
 })
