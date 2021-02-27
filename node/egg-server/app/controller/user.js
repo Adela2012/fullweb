@@ -1,3 +1,4 @@
+'use strict';
 const Controller = require('egg').Controller
 /**
  * @Controller 用户管理
@@ -23,7 +24,7 @@ class UserController extends Controller {
     // 调用 Service 进行业务处理
     const res = await service.user.create(payload)
     // 设置响应内容和响应状态码
-    ctx.helper.success({ctx, res})
+    ctx.helper.success({ ctx, res })
   }
 
 
@@ -41,7 +42,7 @@ class UserController extends Controller {
     // 调用 Service 进行业务处理
     await service.user.destroy(id)
     // 设置响应内容和响应状态码
-    ctx.helper.success({ctx})
+    ctx.helper.success({ ctx })
   }
 
   /**
@@ -61,9 +62,9 @@ class UserController extends Controller {
     // 调用 Service 进行业务处理
     await service.user.update(id, payload)
     // 设置响应内容和响应状态码
-    ctx.helper.success({ctx})
+    ctx.helper.success({ ctx })
   }
- 
+
   /**
    * @summary 获取单个用户
    * @description 获取用户信息
@@ -78,10 +79,10 @@ class UserController extends Controller {
     // 调用 Service 进行业务处理
     const res = await service.user.show(id)
     // 设置响应内容和响应状态码
-    ctx.helper.success({ctx, res})
+    ctx.helper.success({ ctx, res })
   }
 
-  
+
   /**
    * @summary 获取所有用户(分页/模糊)
    * @description 获取用户信息
@@ -99,7 +100,7 @@ class UserController extends Controller {
     // 调用 Service 进行业务处理
     const res = await service.user.index(payload)
     // 设置响应内容和响应状态码
-    ctx.helper.success({ctx, res})
+    ctx.helper.success({ ctx, res })
   }
 
   /**
@@ -118,7 +119,7 @@ class UserController extends Controller {
     // 调用 Service 进行业务处理
     const result = await service.user.removes(payload)
     // 设置响应内容和响应状态码
-    ctx.helper.success({ctx})
+    ctx.helper.success({ ctx })
   }
 }
 
