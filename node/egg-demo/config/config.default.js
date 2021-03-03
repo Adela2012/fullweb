@@ -16,7 +16,24 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1614434103949_5110';
 
   // add your middleware config here
-  config.middleware = [];
+  config.middleware = ['errorHandler']
+
+  config.swaggerdoc = {
+    dirScanner: './app/controller',
+    apiInfo: {
+      title: '接⼝',
+      description: '接⼝ swagger-ui for egg',
+      version: '1.0.0',
+    }, 
+    schemes: ['http', 'https'],
+    consumes: ['application/json'],
+    produces: ['application/json'],
+    enableSecurity: false,
+    // enableValidate: true, 
+    routerMap: true,
+    enable: true,
+
+  }
 
   // add your user config here
   const userConfig = {
