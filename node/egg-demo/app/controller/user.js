@@ -17,8 +17,14 @@ class UserController extends Controller {
      */
     async create() {
         const { ctx } = this;
-        const res = {abc:123}
-        ctx.body = 'hi, user';
+
+        ctx.validate(ctx.rule.createUserRequest)
+
+        const payload = ctx.request.body || {}
+
+        const res = await this.service.user.create(payload)
+        // const res = {abc:123}
+        // ctx.body = 'hi, user';
         ctx.helper.success({ctx, res})
     }
     async index() {

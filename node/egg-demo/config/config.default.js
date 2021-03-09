@@ -24,7 +24,7 @@ module.exports = appInfo => {
       title: '接⼝',
       description: '接⼝ swagger-ui for egg',
       version: '1.0.0',
-    }, 
+    },
     schemes: ['http', 'https'],
     consumes: ['application/json'],
     produces: ['application/json'],
@@ -33,6 +33,24 @@ module.exports = appInfo => {
     routerMap: true,
     enable: true,
 
+  }
+
+  config.mongoose = {
+
+    url: 'mongodb://127.0.0.1:27017/egg_x',
+    options: {
+      // useMongoClient: true, 
+      autoReconnect: true,
+      reconnectTries: Number.MAX_VALUE,
+      bufferMaxEntries: 0,
+    },
+
+  }
+
+  config.jwt = { 
+    secret: 'Great4-M', 
+    enable: true, // default is false 
+    match: /^\/api/, // optional 
   }
 
   // add your user config here
