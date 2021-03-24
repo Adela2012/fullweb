@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        {{count}}
+        <div v-html="html"></div>
+        <div v-text="text"></div>
+    </div>
+    <script src="ivue.js"></script>
+    <script>
+        let vm = new IVue({
+            el: '#app',
+            data: {
+                count: 1,
+                html: '<span style="color:red">red</span>',
+                text: 'text'
+            }
+        })
+        // setInterval(() => {
+        //     vm.count++
+        // }, 1000)
+        // setTimeout(() => {
+        //     vm.count = 3
+        //     vm.count
+        //     // vm.text
+        //     // vm.count
+        // }, 1000)
+    </script>
+</body>
+</html>
