@@ -1,10 +1,11 @@
-import ContextPage from './pages/context/ContextPage'
-import './App.css';
+// import ContextPage from './pages/context/ContextPage'
+import { FormDemoPage } from './pages/form/FormDemoPage';
 
 function App() {
   return (
     <div className="App">
-      <ContextPage />
+      {/* <ContextPage /> */}
+      <FormDemoPage />
     </div>
   );
 }
